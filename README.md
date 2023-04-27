@@ -24,21 +24,33 @@ import { PaginatorTypes } from '@nodeteam/nestjs-prisma-pagination';
 **orderBy**, **where**
 
 ```typescript
+import PrismaService from '@providers/prisma/prisma.service';
+import { Injectable } from '@nestjs/common';
+import { PaginatorTypes, paginator } from '@nodeteam/nestjs-prisma-pagination';
+
 const paginate: PaginatorTypes.PaginateFunction = paginator({ perPage: 10 });
 
-const paginatedResult: PaginatorTypes.PaginatedResult = await paginate(
-    this.prisma.user,
-    {
-        where,
-        orderBy,
-        include: {
-            name: true,
-        },
-    },
-    {
-        page,
-    },
-)
+@Injectable()
+export default class UserService {
+    constructor(private prisma: PrismaService) {}
+
+    async findMany({ where, orderBy, pagination }: {
+        where?: Prisma.UserWhereInput,
+        orderBy?: Prisma.UserOrderByWithRelationInput
+        pagination?: Pagination,
+    }): Promise<PaginatorTypes.PaginatedResult<User>> {
+        return paginate(
+            this.prisma.user,
+            {
+                where,
+                orderBy,
+            },
+            {
+                ...pagination,
+            },
+        );
+    }
+}
 ```
 
 ### Examples:
@@ -70,30 +82,42 @@ https://exmaple.com/api/v1/user?page=1&where=Jake
 **modelName*** - `name of table in db`
 
 ```typescript
-const perPage = 10;
-const searchPaginate: PaginatorTypes.SearchPaginateFunction = searchPaginator({ perPage });
+import PrismaService from '@providers/prisma/prisma.service';
+import { Injectable } from '@nestjs/common';
+import { PaginatorTypes, searchPaginator } from '@nodeteam/nestjs-prisma-pagination';
 
-const page = Number(pagination?.page || 1);
-const skip = page > 0 ? perPage * (page - 1) : 0;
+const searchPaginate: PaginatorTypes.SearchPaginateFunction = searchPaginator({ perPage: 10 });
 
-const searchValue = this.getSearchValue(search);
+@Injectable()
+export default class UserService {
+    constructor(private prisma: PrismaService) {}
 
-const searchOptions = {
-    page,
-    skip,
-    searchValue,
+    async searchUser({
+        page,
+        perPage,
+        skip,
+        searchValue
+    }: {
+        page: number,
+        perPage: number,
+        skip: number,
+        searchValue?: string,
+    }): Promise<PaginatorTypes.PaginatedResult<User>> {
+        const searchColumns = ['firstName', 'lastName', 'description'];
+
+        return searchPaginate(
+            this.prisma,
+            'User',
+            {
+                page,
+                perPage,
+                skip,
+                searchValue,
+                searchColumns,
+            },
+        );
+    }
 }
-
-const searchColumns = ['firstName', 'lastName', 'description'];
-
-const paginatedResult: PaginatorTypes.PaginatedResult = await searchPaginate(
-    this.prisma,
-    'User',
-    {
-        ...searchOptions,
-        searchColumns,
-    },
-);
 ```
 
 ### Examples:
