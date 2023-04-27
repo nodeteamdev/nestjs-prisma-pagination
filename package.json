@@ -32,6 +32,8 @@
     "@jest/globals": "^29.5.0",
     "@types/jest": "^29.5.1",
     "@types/node": "^18.16.1",
+    "@typescript-eslint/eslint-plugin": "^5.59.1",
+    "@typescript-eslint/parser": "^5.59.1",
     "eslint": "^8.39.0",
     "eslint-config-airbnb-base": "^15.0.0"
   },
