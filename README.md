@@ -20,6 +20,8 @@ import { PaginatorTypes } from '@nodeteam/nestjs-prisma-pagination';
 
 **perPage** - `records per page`
 
+Options can be redefined
+
 ## Paginator Arguments:
 **orderBy**, **where**
 
@@ -37,7 +39,8 @@ export default class UserService {
     async findMany({ where, orderBy, pagination }: {
         where?: Prisma.UserWhereInput,
         orderBy?: Prisma.UserOrderByWithRelationInput
-        pagination?: Pagination,
+        page?: number,
+        perPage?: number,
     }): Promise<PaginatorTypes.PaginatedResult<User>> {
         return paginate(
             this.prisma.user,
@@ -46,12 +49,38 @@ export default class UserService {
                 orderBy,
             },
             {
-                ...pagination,
+                page,
+                perPage,
             },
         );
     }
 }
 ```
+
+#### Set options as default:
+
+```typescript
+const paginate: PaginatorTypes.PaginateFunction = paginator({
+    page: 1,
+    perPage: 10,
+});
+```
+
+#### Redefine options:
+```typescript
+        paginate(
+            this.prisma.user,
+            {
+                where,
+                orderBy,
+            },
+            {
+                page: 2,  // Rendefine page
+                perPage: 5, // Rendefine perPage
+            },
+        );
+```
+
 
 ### Examples:
 
@@ -74,6 +103,8 @@ https://exmaple.com/api/v1/user?page=1&where=Jake
 **searchColumns** - `colums where you want to find searchValue`
 
 **searchValue** - `string witch you whant to find`
+
+Options can be redefined
 
 ## Search Paginator arguments:
 
@@ -118,6 +149,30 @@ export default class UserService {
         );
     }
 }
+```
+
+#### Set options as default:
+
+```typescript
+const searchPaginate: PaginatorTypes.SearchPaginateFunction = searchPaginator({
+    page: 1,
+    perPage: 10,
+});
+```
+
+#### Redefine options:
+```typescript
+        searchPaginate(
+            this.prisma, 
+            'User',
+            {
+                page: 2,  // Rendefine page
+                perPage: 5, // Rendefine perPage
+                skip,
+                searchValue,
+                searchColumns,
+            },
+        );
 ```
 
 ### Examples:
