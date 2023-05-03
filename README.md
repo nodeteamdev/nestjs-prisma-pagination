@@ -16,14 +16,40 @@ import { PaginatorTypes } from '@nodeteam/nestjs-prisma-pagination';
 # #Paginator
 
 ## Paginator options:
-**page** - `page number`
+`page` - number of page
 
-**perPage** - `records per page`
+`perPage` - number of records per page
 
 Options can be redefined
 
-## Paginator Arguments:
-**orderBy**, **where**
+## Return type:
+
+```typescript
+{
+    data: T[],
+    meta: {
+        total: number,
+        lastPage: number,
+        currentPage: number,
+        perPage: number,
+        prev: number | null,
+        next: number | null,
+    },
+}
+```
+
+## Example:
+
+Create new paginator function with default options
+
+```typescript
+const paginate: PaginatorTypes.PaginateFunction = paginator({
+    page: 1,
+    perPage: 10,
+});
+```
+
+full example:
 
 ```typescript
 import PrismaService from '@providers/prisma/prisma.service';
@@ -57,15 +83,6 @@ export default class UserService {
 }
 ```
 
-#### Set options as default:
-
-```typescript
-const paginate: PaginatorTypes.PaginateFunction = paginator({
-    page: 1,
-    perPage: 10,
-});
-```
-
 #### Redefine options:
 ```typescript
         paginate(
@@ -94,23 +111,34 @@ https://exmaple.com/api/v1/user?page=1&where=Jake
 
 ## Search Paginator options:
 
-**page** - `page number`
+`page` - number of page
 
-**perPage** - `records per page`
+`perPage` - number of records per page
 
-**skip** - `offset sql`
+`skip` - number of records to skip
 
-**searchColumns** - `colums where you want to find searchValue`
+`searchColumns` - array of columns in db
 
-**searchValue** - `string witch you whant to find`
+`searchValue` - string to search
 
 Options can be redefined
 
 ## Search Paginator arguments:
 
-**model*** - `prisma service`
+`model` - `PrismaClient['modelName']`
 
-**modelName*** - `name of table in db`
+`modelName` - Name of model
+
+create new search paginator function with default options
+
+```typescript
+const searchPaginate: PaginatorTypes.SearchPaginateFunction = searchPaginator({
+  page: 1,
+  perPage: 10,
+});
+```
+
+full example:
 
 ```typescript
 import PrismaService from '@providers/prisma/prisma.service';
@@ -151,15 +179,6 @@ export default class UserService {
 }
 ```
 
-#### Set options as default:
-
-```typescript
-const searchPaginate: PaginatorTypes.SearchPaginateFunction = searchPaginator({
-    page: 1,
-    perPage: 10,
-});
-```
-
 #### Redefine options:
 ```typescript
         searchPaginate(
@@ -181,3 +200,5 @@ const searchPaginate: PaginatorTypes.SearchPaginateFunction = searchPaginator({
 ```
 https://example.com/api/v1/users/full-text/search?search=Lions&page=1
 ```
+
+Check useful npm packages from NodeTeam: https://www.npmjs.com/org/nodeteam
