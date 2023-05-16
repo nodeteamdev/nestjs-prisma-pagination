@@ -201,4 +201,58 @@ export default class UserService {
 https://example.com/api/v1/users/full-text/search?search=Lions&page=1
 ```
 
+# #Pagination Helpers
+
+## `getPagination` options:
+
+`rawPage` - number of page (optional)
+
+`rawPerPage` - number of records per page (optional)
+
+### Examples:
+```
+const result = getPagination(1, 10);
+
+result => {
+    perPage: 10,
+    page: 1,
+    skip: 0,
+};
+
+```
+
+## `getPaginatedResult` options:
+
+`data` - array of entities
+
+`pagination` - page, perPage, skip
+
+`count` - total count
+
+### Examples:
+```
+const result = getPaginatedResult({
+    data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    pagination: {
+        page: 1,
+        perPage: 10,
+        skip: 0,
+      },
+    count: 100,
+});
+
+result => {
+    data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    meta: {
+      total: 100,
+      lastPage: 10,
+      currentPage: 1,
+      perPage: 10,
+      prev: 0,
+      next: 1,
+    },
+  };
+
+```
+
 Check useful npm packages from NodeTeam: https://www.npmjs.com/org/nodeteam
