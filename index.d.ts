@@ -26,4 +26,10 @@ export namespace PaginatorTypes {
         searchValue?: string;
     };
     export type SearchPaginateFunction = <T>(model: any, modelName: string, options?: SearchPaginateOptions) => Promise<PaginatedResult<T>>;
+
+    export interface Pagination {
+        page: number;
+        perPage: number;
+        skip: number;
+    }
 }
