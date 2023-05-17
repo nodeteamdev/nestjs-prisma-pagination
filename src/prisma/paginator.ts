@@ -1,6 +1,6 @@
 import {
   PaginatorTypes,
-} from "../../index";
+} from '../../index';
 
 export const paginator = (defaultOptions: PaginatorTypes.PaginateOptions): PaginatorTypes.PaginateFunction => {
   // eslint-disable-next-line default-param-last
