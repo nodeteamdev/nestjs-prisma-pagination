@@ -1,6 +1,6 @@
 {
   "name": "@nodeteam/nestjs-prisma-pagination",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Paginators for Nest.JS app",
   "main": "dist/index.js",
   "scripts": {
