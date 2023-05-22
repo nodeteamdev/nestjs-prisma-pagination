@@ -12,12 +12,13 @@ const getPagination = (rawPage, rawPerPage) => {
     };
 };
 exports.getPagination = getPagination;
-const getPaginatedResult = ({ data, pagination, count, }) => {
+const getPaginatedResult = ({ data, pagination, count = data.length, }) => {
     const { page = 1, perPage = 10 } = pagination;
+    const slicedData = data.slice(pagination.page === 1 ? 0 : (pagination.page - 1) * pagination.perPage, pagination.page * pagination.perPage);
     const total = Number(count || 0);
     const lastPage = Math.ceil(total / perPage);
     return {
-        data,
+        data: slicedData,
         meta: {
             total,
             lastPage,

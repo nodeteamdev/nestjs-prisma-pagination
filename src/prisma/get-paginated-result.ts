@@ -28,7 +28,7 @@ export const getPagination = (rawPage?: number | string, rawPerPage?: number | s
 export const getPaginatedResult = <T>({
   data,
   pagination,
-  count,
+  count = data.length,
 }:{
   data: T[],
   pagination: PaginatorTypes.Pagination,
@@ -36,11 +36,15 @@ export const getPaginatedResult = <T>({
 }): PaginatorTypes.PaginatedResult<T> => {
   const { page = 1, perPage = 10 } = pagination;
 
+  const slicedData = data.slice(
+    pagination.page === 1 ? 0 : (pagination.page - 1) * pagination.perPage,
+    pagination.page * pagination.perPage,
+  );
   const total: number = Number(count || 0);
   const lastPage: number = Math.ceil(total / perPage);
 
   return {
-    data,
+    data: slicedData,
     meta: {
       total,
       lastPage,
